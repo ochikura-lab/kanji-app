@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { pdf } from "@react-pdf/renderer";
 import { KanjiQuizPDF } from "@/components/KanjiQuizPDF";
 import { sampleQuestions, Question } from "@/lib/sampleQuestions";
@@ -120,6 +121,21 @@ export default function PdfPreviewPage() {
               >
                 {answerLoading ? "生成中..." : "✅ 解答用紙をダウンロード"}
               </button>
+
+              {/* 間違い登録 */}
+              <Link
+                href={`/mistakes?grade=${grade}`}
+                className="
+                  block w-full rounded-xl border-2 border-red-200 bg-red-50 px-4 py-4
+                  text-base font-bold text-red-500 text-center
+                  hover:bg-red-100 hover:border-red-300
+                  active:bg-red-200
+                  focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
+                  transition-colors duration-150
+                "
+              >
+                ✏️ 間違いを登録する
+              </Link>
             </>
           )}
 
