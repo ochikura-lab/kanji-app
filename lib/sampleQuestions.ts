@@ -1,11 +1,5 @@
-export type Question = {
-  id: string;
-  grade: number;
-  sentence: string;
-  answer: string;
-  reading: string;
-  readingPerChar: string[];
-};
+import { Question } from "@/lib/types/question";
+export type { Question };
 
 export const sampleQuestions: Question[] = [
   {

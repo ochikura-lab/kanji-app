@@ -2,13 +2,23 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { sampleQuestions, Question } from "@/lib/sampleQuestions";
 import { createClient } from "@/lib/supabase/client";
+import { Question } from "@/lib/types/question";
 
 // grade に応じた問題データを返す（現状 grade=5 のみ実データ）
 function getQuestionsByGrade(grade: number): Question[] {
-  if (grade === 5) return sampleQuestions;
+  if (grade === 5) return grade5Questions;
   return [];
+}
+
+// stage に応じた復習日（YYYY-MM-DD）を返す
+const INTERVALS = [1, 3, 7, 14, 30];
+
+function calcNextReviewDate(stage: number): string {
+  const days = INTERVALS[stage] ?? 1;
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split("T")[0];
 }
 
 export default function MistakesPage() {
@@ -34,19 +44,13 @@ export default function MistakesPage() {
     setSaving(true);
     const supabase = createClient();
 
-    // mistakes テーブルに insert
-    // テーブル構成例:
-    //   id         uuid (PK, default gen_random_uuid())
-    //   question_id text
-    //   answer      text
-    //   reading     text
-    //   grade       int2
-    //   created_at  timestamptz (default now())
     const rows = mistakes.map((q) => ({
       question_id: q.id,
       answer: q.answer,
       reading: q.reading,
       grade,
+      interval_stage: 0,
+      next_review_date: calcNextReviewDate(0), // 初回間違い → 1日後
     }));
 
     const { error } = await supabase.from("mistakes").insert(rows);

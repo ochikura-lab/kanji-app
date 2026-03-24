@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Font,
 } from "@react-pdf/renderer";
-import { Question } from "@/lib/sampleQuestions";
+import { Question } from "@/lib/types/question";
 
 // @react-pdf/renderer はデフォルトで日本語フォントを持たないため、
 // Google Fonts から Noto Sans JP を登録する
